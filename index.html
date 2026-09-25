@@ -294,7 +294,8 @@
 .receipt-share-simple{background:#16855b;color:#fff}
 @media(max-width:600px){.receipt-tools-simple{display:grid;grid-template-columns:1fr;padding:0 18px 18px}.receipt-tools-simple button{width:100%}}
 @media print{.receipt-tools-simple{display:none!important}}
-</style></head><body>
+</style><link rel="manifest" href="./manifest.json"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png">
+</head><body>
 
 <div id="veiStartupScreen" aria-label="Abertura da Vidraçaria Entre-Ijuís">
   <div class="vei-startup-card">
@@ -928,7 +929,20 @@ async function getQuotePdf(id){const q=db.quotes.find(x=>x.id===id);if(!q)throw 
 function printQuote(id){
  const win=window.open('about:blank','_blank');
  if(!win){alert('O navegador bloqueou a janela de impressão. Permita pop-ups para este aplicativo.');return;}
- win.document.write('<!doctype html><html lang=\"pt-BR\"><head><meta charset=\"utf-8\"><title>Orçamento</title></head><body style=\"font-family:Arial;padding:30px\">Preparando orçamento...</body></html>');
+ win.document.write('<!doctype html><html lang=\"pt-BR\"><head><meta charset=\"utf-8\"><title>Orçamento</title></head><body style=\"font-family:Arial;padding:30px\">Preparando orçamento...
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(err=>console.warn('PWA:',err)));}</script>
+<script id="vei-pwa-register">
+(function(){
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('./sw.js',{scope:'./'}).then(function(reg){
+        if(reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+      }).catch(function(err){ console.warn('PWA:',err); });
+    });
+  }
+})();
+</script>
+</body></html>');
  win.document.close();
  getQuotePdf(id).then(z=>{const url=URL.createObjectURL(z.blob);win.location.href=url;}).catch(e=>{win.close();alert('Não foi possível gerar o PDF: '+e.message)});
 }
