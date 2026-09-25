@@ -1,0 +1,27 @@
+VIDRACARIA ENTRE-IJUIS — CORRECAO DO PROJETO ANDROID
+
+O problema encontrado no projeto foi a configuracao do Java usada pelo Gradle.
+O projeto estava sendo executado primeiro com Java 8 e depois com Java 25.
+A combinacao atual do Capacitor/Android usa um Gradle que nao deve ser executado
+com Java 25; por isso o build parou com "Unsupported class file major version 69".
+
+ESTA CORRECAO:
+1. Procura o JDK 21.
+2. Instala o Microsoft OpenJDK 21 pelo WinGet caso ele nao esteja instalado.
+3. Define o JDK 21 para o build.
+4. Grava org.gradle.java.home no android/gradle.properties para o projeto continuar usando o JDK correto.
+5. Sincroniza o Capacitor.
+6. Executa assembleDebug.
+7. Abre a pasta do app-debug.apk quando terminar.
+
+COMO USAR:
+- Feche o Android Studio para evitar disputa de arquivos durante o primeiro build.
+- Deixe este .BAT na pasta Downloads ou coloque-o na pasta do projeto.
+- Clique duas vezes em CORRIGIR_E_GERAR_APK.bat.
+- Se o Windows pedir permissao para instalar o JDK 21, aceite.
+- Nao feche a janela durante o build.
+
+O APK gerado sera:
+android\app\build\outputs\apk\debug\app-debug.apk
+
+Observacao: o script nao altera o HTML do sistema. Ele corrige apenas a configuracao de build Java/Gradle e executa a compilacao Android.
