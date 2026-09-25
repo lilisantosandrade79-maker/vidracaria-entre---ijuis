@@ -929,8 +929,7 @@ async function getQuotePdf(id){const q=db.quotes.find(x=>x.id===id);if(!q)throw 
 function printQuote(id){
  const win=window.open('about:blank','_blank');
  if(!win){alert('O navegador bloqueou a janela de impressão. Permita pop-ups para este aplicativo.');return;}
- win.document.write('<!doctype html><html lang=\"pt-BR\"><head><meta charset=\"utf-8\"><title>Orçamento</title></head><body style=\"font-family:Arial;padding:30px\">Preparando orçamento...
-</body></html>');
+ win.document.write('<!doctype html><html lang=\"pt-BR\"><head><meta charset=\"utf-8\"><title>Orçamento</title></head><body style=\"font-family:Arial;padding:30px\">Preparando orçamento...</body></html>');
  win.document.close();
  getQuotePdf(id).then(z=>{const url=URL.createObjectURL(z.blob);win.location.href=url;}).catch(e=>{win.close();alert('Não foi possível gerar o PDF: '+e.message)});
 }
@@ -1553,6 +1552,14 @@ async function restore(event){
   }else{
     setTimeout(hideVEIStartup, 850);
   }
+})();
+</script>
+<script id="vei-pwa-register">
+(function(){
+  if (!('serviceWorker' in navigator)) return;
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('./sw.js', {scope:'./'}).catch(function(err){console.warn('Service Worker:', err);});
+  });
 })();
 </script>
 </body></html>
